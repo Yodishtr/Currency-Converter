@@ -9,12 +9,25 @@ public class CurrencyCalculator {
 
     }
 
+    public CurrencyCalculator() {
+        this.user_input_currency = "";
+        this.currency_convert_to = "";
+    }
+
     public String getUser_input_currency() {
         return user_input_currency;
     }
 
     public String getCurrency_convert_to() {
         return currency_convert_to;
+    }
+
+    public void setUser_input_currency(String user_input_currency) {
+        this.user_input_currency = user_input_currency;
+    }
+
+    public void setCurrency_convert_to(String currency_convert_to) {
+        this.currency_convert_to = currency_convert_to;
     }
 
     public String conversion_calculator(double exchange_rate, String user_amount){

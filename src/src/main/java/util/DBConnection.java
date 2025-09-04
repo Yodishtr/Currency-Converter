@@ -11,7 +11,7 @@ import java.sql.SQLException;
  * author: Yodishtr
  */
 public class DBConnection {
-    public static Connection conn;
+    public  Connection conn;
     private final String url = "jdbc:postgresql://localhost:5432/currency";
     private final String user = "yodishtrvythilingum";
     private final String password = "";

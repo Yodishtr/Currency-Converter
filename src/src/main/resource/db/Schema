@@ -1,0 +1,4 @@
+Current Schema for the Database:
+
+conversion_log = (id primary key auto-increment, source_currency VARCHAR(3), end_currency VARCHAR(3),
+                amount DECIMAL, result DECIMAL, converted_at TIMESTAMP DEFAULT TIMESTAMP)

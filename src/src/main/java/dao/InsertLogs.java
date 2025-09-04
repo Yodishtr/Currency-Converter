@@ -21,6 +21,8 @@ public class InsertLogs {
         this.result = result;
     }
 
+    public InsertLogs() {}
+
     // Getters
     public String getBaseCurrency() {
         return baseCurrency;

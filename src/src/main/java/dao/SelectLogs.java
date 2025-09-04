@@ -24,4 +24,48 @@ public class SelectLogs {
         this.result = result;
         this.timeStamp = timeStamp;
     }
+
+    public SelectLogs() {}
+
+    // setters
+    public void setBaseCurrency(String baseCurrency) {
+        this.baseCurrency = baseCurrency;
+    }
+
+    public void setFinalCurrency(String finalCurrency) {
+        this.finalCurrency = finalCurrency;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public void setResult(BigDecimal result) {
+        this.result = result;
+    }
+
+    public void setTimeStamp(LocalDateTime timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    // Getters
+    public String getBaseCurrency() {
+        return baseCurrency;
+    }
+
+    public String getFinalCurrency() {
+        return finalCurrency;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public BigDecimal getResult() {
+        return result;
+    }
+
+    public LocalDateTime getTimeStamp() {
+        return timeStamp;
+    }
 }

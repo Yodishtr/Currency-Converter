@@ -14,12 +14,16 @@ import java.util.Map;
  * for converting from our base currency to our final currency.
  */
 public class Conversion {
-    private APIClient apiClient;
+    private final APIClient apiClient = new APIClient();
 
-    public Conversion() {
-        apiClient = new APIClient();
-    }
+    public Conversion() {}
 
+    /**
+     * The argument to this will be provided by the ServiceWiring class which
+     * will use arguments received from the controller.
+     * @param toConvert
+     * @return
+     */
     public ConversionResult convert(ConversionRequest toConvert) {
         RateResponse rateResponse = apiClient.fetchRate();
         BigDecimal currentAmount = toConvert.getAmount();

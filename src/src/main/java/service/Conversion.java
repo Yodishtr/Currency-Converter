@@ -15,8 +15,11 @@ import java.util.Map;
  */
 public class Conversion {
     private final APIClient apiClient = new APIClient();
+    private RateResponse rateResponse;
 
-    public Conversion() {}
+    public Conversion() {
+        rateResponse = apiClient.fetchRate();
+    }
 
     /**
      * The argument to this will be provided by the ServiceWiring class which
@@ -25,7 +28,6 @@ public class Conversion {
      * @return
      */
     public ConversionResult convert(ConversionRequest toConvert) {
-        RateResponse rateResponse = apiClient.fetchRate();
         BigDecimal currentAmount = toConvert.getAmount();
         String currBaseCurrency = toConvert.getBaseCurrency();
         String finalCurrency = toConvert.getFinalCurrency();

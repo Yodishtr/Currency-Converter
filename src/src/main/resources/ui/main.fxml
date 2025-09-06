@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+
+
+
+<SplitPane dividerPositions="0.6"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="controllers.Controller">
+    <!--Left Panel: contains recent conversion logs-->
+    <VBox styleClass="conversionLog">
+        <Label text="Currency Conversion History" textAlignment="CENTER"/>
+        <MFXTableView fx:id="conversionTable" prefHeight="500" prefWidth="600">
+
+        </MFXTableView>
+    </VBox>
+
+    <!-- Right Panel: top bar contains conversion and bottom rest contains the historical graph of the base currency -->
+    <BorderPane styleClass="conversions">
+        <top>
+            <HBox spacing="10" padding="16" styleClass="conversionProcess">
+                <MFXFilterComboBox fx:id="fromCombo" promptText="From"/>
+                <MFXTextField fx:id="AmountField" floatingText="Amount" floatMode="BORDER"/>
+                <MFXFilterComboBox fx:id="toCombo" promptText="To"/>
+                <MFXTextField fx:id="ResultField" floatingText="Result" floatMode="Border"/>
+                <MFXButton fx:id="convertButton" text="Convert" buttonType="RAISED"/>
+                <MFXButton fx:id="swapButton" text="⇄" buttonType="RAISED"/>
+            </HBox>
+        </top>
+        <center>
+            <StackPane BorderPane.alignment="CENTER" styleClass="graph">
+                <!-- A historical graph data chart for the converison from base currency to end currency -->
+                <LineChart fx:id="historicalGraph" animated="false" legendVisible="false" createSymbols="false">
+                    <xAxis>
+                        <CategoryAxis fx:id="dateAxis" label="Date"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis fx:id="rateAxis" label="Rate"/>
+                    </yAxis>
+                </LineChart>
+
+                <!-- A message when no base and end currencies are selected -->
+                <Label fx:id="emptyGraphMsg" text="Select a base currency and an end currency" visible="false"/>
+
+                <!-- A spinner to show when the graph has been fully Loaded -->
+                <MFXProgressSpinner fx:id="loadingSpinner" visible="false"/>
+            </StackPane>
+        </center>
+    </BorderPane>
+
+
+</SplitPane>

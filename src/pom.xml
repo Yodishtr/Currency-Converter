@@ -53,6 +53,12 @@
             <version>${javafx.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
         <!-- MaterialFX for ui -->
         <dependency>
             <groupId>io.github.palexdev</groupId>
@@ -75,7 +81,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>app.controllers.JFXClass</mainClass>
+                    <mainClass>app.app.JFXClass</mainClass>
                 </configuration>
             </plugin>
         </plugins>

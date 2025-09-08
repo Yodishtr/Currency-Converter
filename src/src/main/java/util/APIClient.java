@@ -28,7 +28,7 @@ public class APIClient {
         }
     }
 
-    public RateResponse fetchRate() {
+    public RateResponse fetchRate() throws IOException{
         String finalUrl = baseUrl + apiKey;
         RateResponse rateResponse = null;
         try {
@@ -45,10 +45,9 @@ public class APIClient {
             String responseBody = readResponse(connection, stream);
             rateResponse = mapper.readValue(responseBody, RateResponse.class);
 
-        } catch (MalformedURLException e) {
+        } catch (IOException e) {
             System.out.println("Malformed URL");
-        } catch(Exception e){
-            System.out.println("Error: " + e.getMessage());
+
         }
         return rateResponse;
 

@@ -10,4 +10,22 @@ package model;
  * that way, when these cards are put into the filter combo boxes, they look nice and are easy to search.
  */
 public class CurrencyCard {
+    private String currencyCode;
+
+    public CurrencyCard(String currencyCode){
+        this.currencyCode = currencyCode;
+    }
+
+    @Override
+    public String toString() {
+        return currencyCode;
+    }
+
+    public String getCurrencyCode(){
+        return currencyCode;
+    }
+
+    public void setCurrencyCode(String newCurrencyCode){
+        currencyCode = newCurrencyCode;
+    }
 }

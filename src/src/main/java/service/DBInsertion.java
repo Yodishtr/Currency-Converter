@@ -40,7 +40,7 @@ public class DBInsertion {
             preparedStatement.setBigDecimal(4, result);
             preparedStatement.executeUpdate();
             System.out.println("Insertion successful");
-            dbConnection.conn.close();
+
 
         } catch (SQLException e) {
             System.out.println("Unable to insert conversion log. Error: " + e.getMessage());
@@ -55,5 +55,9 @@ public class DBInsertion {
     // Setters
     public void setCurrentInsertionLog(InsertLogs currentInsertionLog){
         this.currentInsertionLog = currentInsertionLog;
+    }
+
+    public DBConnection getDBConnection(){
+        return dbConnection;
     }
 }

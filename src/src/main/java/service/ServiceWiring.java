@@ -4,8 +4,11 @@ import dao.ConversionRequest;
 import dao.ConversionResult;
 import dao.InsertLogs;
 import dao.SelectLogs;
+import model.CurrencyCatalog;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -21,7 +24,8 @@ public class ServiceWiring {
 
     public ServiceWiring() {}
 
-    public ConversionResult performConversion(String baseCurrency, BigDecimal amount, String finalCurrency){
+    public ConversionResult performConversion(String baseCurrency, BigDecimal amount, String finalCurrency)
+            throws IOException {
         ConversionRequest conversionRequest = new ConversionRequest(baseCurrency, amount, finalCurrency);
         ConversionResult conversionResult = conversionService.convert(conversionRequest);
         return conversionResult;
@@ -35,5 +39,18 @@ public class ServiceWiring {
 
     public ArrayList<SelectLogs> performRetrieval(){
         return dbRetrievalService.retrieveLogsList();
+    }
+
+    public CurrencyCatalog getCurrencyCatalog(){
+        CurrencyCatalog currCatalog = conversionService.populateCatalog();
+        return currCatalog;
+    }
+
+    public void closeRetrievalConnection() throws SQLException {
+        dbRetrievalService.getDBConnection().conn.close();
+    }
+
+    public void closeInsertionConnection() throws SQLException {
+        dbInsertionService.getDBConnection().conn.close();
     }
 }

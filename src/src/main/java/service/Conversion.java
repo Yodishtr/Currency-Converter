@@ -3,11 +3,15 @@ package service;
 import dao.ConversionRequest;
 import dao.ConversionResult;
 import dao.RateResponse;
+import model.CurrencyCard;
+import model.CurrencyCatalog;
 import util.APIClient;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This class represents the conversion service that we will be doing
@@ -18,7 +22,7 @@ public class Conversion {
     private RateResponse rateResponse;
 
     public Conversion() {
-        rateResponse = apiClient.fetchRate();
+
     }
 
     /**
@@ -27,7 +31,11 @@ public class Conversion {
      * @param toConvert
      * @return
      */
-    public ConversionResult convert(ConversionRequest toConvert) {
+    public ConversionResult convert(ConversionRequest toConvert) throws IOException{
+        // moved this into the constructor because didnt wanna have to use too many tokens
+        // and wanted it to already get the rates since i get it in a EUR base already.
+        // change it tomorrow !!
+        rateResponse = apiClient.fetchRate();
         BigDecimal currentAmount = toConvert.getAmount();
         String currBaseCurrency = toConvert.getBaseCurrency();
         String finalCurrency = toConvert.getFinalCurrency();
@@ -59,6 +67,22 @@ public class Conversion {
             return conversionAnswer;
 
         }
+    }
+
+
+    /**
+     * This method allows the conversion class to populate the currency catalog with the required
+     * currency card. This makes it easier to have the currencies available to the user.
+     */
+    public CurrencyCatalog populateCatalog(){
+        CurrencyCatalog currencyCatalog = new CurrencyCatalog();
+        Map<String, BigDecimal> ratesMap = rateResponse.getRates();
+        Set<String> currencyCodes = ratesMap.keySet();
+        for (String currencyCode : currencyCodes) {
+            CurrencyCard currencyCard = new CurrencyCard(currencyCode);
+            currencyCatalog.addToCatalog(currencyCard);
+        }
+        return currencyCatalog;
     }
 
 }

@@ -33,7 +33,7 @@ public class DBRetrieval {
                currentLog.setTimeStamp(resultSet.getTimestamp("converted_at").toLocalDateTime());
                selectLogsList.getLogsList().add(0, currentLog);
            }
-           dbConnection.conn.close();
+
        } catch (SQLException e) {
            System.out.println("Unable to retrieve logs from database. Error: " + e.getMessage());
        }
@@ -46,6 +46,10 @@ public class DBRetrieval {
            return new ArrayList<>(selectLogsList.getLogsList().subList(0, 6));
        }
 
+   }
+
+   public DBConnection getDBConnection(){
+       return dbConnection;
    }
 
 

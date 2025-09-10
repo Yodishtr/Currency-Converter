@@ -24,8 +24,7 @@ public class ServiceWiring {
 
     public ServiceWiring() {}
 
-    public ConversionResult performConversion(String baseCurrency, BigDecimal amount, String finalCurrency)
-            throws IOException {
+    public ConversionResult performConversion(String baseCurrency, BigDecimal amount, String finalCurrency) {
         ConversionRequest conversionRequest = new ConversionRequest(baseCurrency, amount, finalCurrency);
         ConversionResult conversionResult = conversionService.convert(conversionRequest);
         return conversionResult;

@@ -22,7 +22,7 @@ public class Conversion {
     private RateResponse rateResponse;
 
     public Conversion() {
-
+        rateResponse = apiClient.fetchRate();
     }
 
     /**
@@ -31,11 +31,7 @@ public class Conversion {
      * @param toConvert
      * @return
      */
-    public ConversionResult convert(ConversionRequest toConvert) throws IOException{
-        // moved this into the constructor because didnt wanna have to use too many tokens
-        // and wanted it to already get the rates since i get it in a EUR base already.
-        // change it tomorrow !!
-        rateResponse = apiClient.fetchRate();
+    public ConversionResult convert(ConversionRequest toConvert){
         BigDecimal currentAmount = toConvert.getAmount();
         String currBaseCurrency = toConvert.getBaseCurrency();
         String finalCurrency = toConvert.getFinalCurrency();

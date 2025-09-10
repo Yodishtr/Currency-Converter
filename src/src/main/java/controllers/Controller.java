@@ -4,20 +4,25 @@ import dao.ConversionResult;
 import dao.InsertLogs;
 import dao.SelectLogs;
 import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Label;
+import javafx.stage.Popup;
 import model.CurrencyCard;
 import model.CurrencyCatalog;
 import service.ServiceWiring;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -63,11 +68,37 @@ public class Controller {
         fromCombo.setItems(FXCollections.observableArrayList(currencyCatalog.getCards()));
         toCombo.setItems(FXCollections.observableArrayList(currencyCatalog.getCards()));
         convertButton.setOnAction(e -> onConvert());
+        swapButton.setOnAction(e -> onSwap());
+
+        // handling the table display
+        setupConversionTable();
+        conversionTable.setItems(conversions);
+        loadLogsAsync();
 
 
     }
 
-    private void onConvert() {
+    private void loadLogsAsync() {
+        ioExecutor.submit(() -> {
+            try{
+                ArrayList<SelectLogs> conversionLogs = serviceWiring.performRetrieval();
+                Platform.runLater(() -> {
+                    conversions.setAll(conversionLogs);
+                });
+
+            } catch(Exception e){
+                Platform.runLater(() -> {
+                    conversions.clear();
+                });
+            }
+        });
+    }
+
+    private void setupConversionTable() {
+
+    }
+
+    private void onConvert(){
         String sourceCurrency = fromCombo.getValue().getCurrencyCode();
         String targetCurrency = toCombo.getValue().getCurrencyCode();
         String amount = AmountField.getText();
@@ -88,37 +119,56 @@ public class Controller {
         // prevents repeated attempts for conversions and trying to swap while converting.
         convertButton.setDisable(true);
         swapButton.setDisable(true);
+        // does the conversion
+        ConversionResult conversionResult = serviceWiring.performConversion(sourceCurrency, collectedAmount,
+                targetCurrency);
+        ResultField.setText(conversionResult.getFinalAmount().toString());
 
-        Task<ConversionResult> task = new Task<>() {
-            @Override
-            protected ConversionResult call() throws IOException {
-                ConversionResult conversionResult = serviceWiring.performConversion(sourceCurrency, collectedAmount,
-                        targetCurrency);
-                InsertLogs insertLog = new InsertLogs();
-                insertLog.setBaseCurrency(sourceCurrency);
-                insertLog.setEndCurrency(targetCurrency);
-                insertLog.setAmount(collectedAmount);
-                insertLog.setResult(conversionResult.getFinalAmount());
-                return conversionResult;
+        // need to be run on a separate thread to prevent UI freezing.
+        // separate thread for insertion
+        ioExecutor.submit(() -> {
+            try{
+                serviceWiring.performInsertion(sourceCurrency, targetCurrency, collectedAmount,
+                        conversionResult.getFinalAmount());
+                javafx.application.Platform.runLater(() -> {
+                    Popup popup = new Popup();
+                    Label message = new Label("Log saved successfully!");
+                    popup.getContent().add(message);
+                    Bounds bounds = ResultField.localToScreen(ResultField.getBoundsInLocal());
+                    popup.show(ResultField, bounds.getMinX(), bounds.getMaxY());
+                });
+                loadLogsAsync();
+
+            } catch(Exception e) {
+                Platform.runLater(() -> {
+                    Popup popup = new Popup();
+                    Label message = new Label("Failed to save log!");
+                    popup.getContent().add(message);
+                    Bounds bounds = ResultField.localToScreen(ResultField.getBoundsInLocal());
+                    popup.show(ResultField, bounds.getMinX(), bounds.getMaxY());
+                });
+
+            } finally {
+                Platform.runLater(() -> {
+                    convertButton.setDisable(false);
+                    swapButton.setDisable(false);
+                });
             }
-        };
-
-        task.setOnSucceeded(e -> {
-            ConversionResult result = task.getValue();
-            ResultField.setText(result.getFinalAmount().toString());
-            convertButton.setDisable(false);
-            swapButton.setDisable(false);
         });
 
-        task.setOnFailed(e -> {
-            Throwable ex = task.getException();
-            ResultField.setText("Conversion failed");
-            convertButton.setDisable(false);
-            swapButton.setDisable(false);
-        });
+    }
 
-        ioExecutor.submit(task);
-
+    private void onSwap() {
+        CurrencyCard newSourceCurrency = toCombo.getValue();
+        CurrencyCard newTargetCurrency = fromCombo.getValue();
+        convertButton.setDisable(true);
+        swapButton.setDisable(true);
+        toCombo.setValue(newTargetCurrency);
+        fromCombo.setValue(newSourceCurrency);
+        toCombo.setText(newTargetCurrency.getCurrencyCode());
+        fromCombo.setText(newSourceCurrency.getCurrencyCode());
+        convertButton.setDisable(false);
+        swapButton.setDisable(false);
     }
 
 }

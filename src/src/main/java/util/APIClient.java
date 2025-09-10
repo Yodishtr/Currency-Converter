@@ -28,7 +28,7 @@ public class APIClient {
         }
     }
 
-    public RateResponse fetchRate() throws IOException{
+    public RateResponse fetchRate() {
         String finalUrl = baseUrl + apiKey;
         RateResponse rateResponse = null;
         try {

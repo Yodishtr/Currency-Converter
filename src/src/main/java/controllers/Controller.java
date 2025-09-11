@@ -4,6 +4,7 @@ import dao.ConversionResult;
 import dao.InsertLogs;
 import dao.SelectLogs;
 import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -22,7 +23,10 @@ import service.ServiceWiring;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -67,6 +71,7 @@ public class Controller {
         CurrencyCatalog currencyCatalog = serviceWiring.getCurrencyCatalog();
         fromCombo.setItems(FXCollections.observableArrayList(currencyCatalog.getCards()));
         toCombo.setItems(FXCollections.observableArrayList(currencyCatalog.getCards()));
+        ResultField.setEditable(false);
         convertButton.setOnAction(e -> onConvert());
         swapButton.setOnAction(e -> onSwap());
 
@@ -95,7 +100,36 @@ public class Controller {
     }
 
     private void setupConversionTable() {
+        // setup the columns for the table.
+        // add a comparator to enable filtering by the columns type
+        // Base Currency column
+        MFXTableColumn<SelectLogs> baseColumn = new MFXTableColumn<>("From", true);
+        baseColumn.setRowCellFactory(log -> new MFXTableRowCell<>(SelectLogs::getBaseCurrency));
+        baseColumn.setComparator(Comparator.comparing(SelectLogs::getBaseCurrency, Comparator.nullsLast(String::compareTo)));
 
+        // Final currency column
+        MFXTableColumn<SelectLogs> finalColumn = new MFXTableColumn<>("To", true);
+        finalColumn.setRowCellFactory(log -> new MFXTableRowCell<>(SelectLogs::getFinalCurrency));
+        finalColumn.setComparator(Comparator.comparing(SelectLogs::getFinalCurrency, Comparator.nullsLast(String::compareTo)));
+
+        // Amount Column
+        MFXTableColumn<SelectLogs> amountColumn = new MFXTableColumn<>("Amount", true);
+        amountColumn.setRowCellFactory(log -> new MFXTableRowCell<>(l -> l.getAmount().toPlainString()));
+        amountColumn.setComparator(Comparator.comparing(SelectLogs::getAmount, Comparator.nullsLast(BigDecimal::compareTo)));
+
+        // Result Column
+        MFXTableColumn<SelectLogs> resultColumn = new MFXTableColumn<>("Result", true);
+        resultColumn.setRowCellFactory(log -> new MFXTableRowCell<>(l -> l.getResult().toPlainString()));
+        resultColumn.setComparator(Comparator.comparing(SelectLogs::getResult, Comparator.nullsLast(BigDecimal::compareTo)));
+
+        // Timestamp Column
+        MFXTableColumn<SelectLogs> timeColumn = new MFXTableColumn<>("Time", true);
+        timeColumn.setRowCellFactory(log -> new MFXTableRowCell<>(l -> l.getTimeStamp().toString()));
+        timeColumn.setComparator(Comparator.comparing(SelectLogs::getTimeStamp, Comparator.nullsLast(LocalDateTime::compareTo)));
+
+        // add the columns to the conversion log table
+        conversionTable.getTableColumns().addAll(baseColumn, finalColumn, amountColumn, resultColumn, timeColumn);
+        conversionTable.autosizeColumnsOnInitialization();
     }
 
     private void onConvert(){

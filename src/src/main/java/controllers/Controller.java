@@ -16,6 +16,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.stage.Popup;
 import model.CurrencyCard;
 import model.CurrencyCatalog;
@@ -54,11 +55,8 @@ public class Controller {
 
 
     // Centre Right Panel: contains the line chart to display the historical data for the currency
-    @FXML private LineChart<String, Number> historicalGraph;
-    @FXML private CategoryAxis dateAxis;
-    @FXML private NumberAxis rateAxis;
-    @FXML private Label emptyGraphMsg;
-    @FXML private MFXProgressSpinner loadingSpinner;
+    @FXML private ScrollPane descriptionScrollPane;
+    @FXML private Label baseName, baseDesc, targetName, targetDesc;
 
     // updates the ui conversion table by using an observable list so that no manual refresh needed.
     private final ObservableList<SelectLogs> conversions = FXCollections.observableArrayList();
@@ -80,6 +78,14 @@ public class Controller {
         conversionTable.setItems(conversions);
         loadLogsAsync();
 
+        // listen to changes for the base and target currencies to display currency info in scrollpane
+        fromCombo.valueProperty().addListener((observable, oldValue, newValue) -> updateDetails());
+        toCombo.valueProperty().addListener((observable, oldValue, newValue) -> updateDetails());
+
+
+    }
+
+    private void updateDetails() {
 
     }
 
@@ -199,8 +205,7 @@ public class Controller {
         swapButton.setDisable(true);
         toCombo.setValue(newTargetCurrency);
         fromCombo.setValue(newSourceCurrency);
-        toCombo.setText(newTargetCurrency.getCurrencyCode());
-        fromCombo.setText(newSourceCurrency.getCurrencyCode());
+
         convertButton.setDisable(false);
         swapButton.setDisable(false);
     }

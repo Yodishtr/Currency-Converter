@@ -32,23 +32,22 @@
             </HBox>
         </top>
         <center>
-            <StackPane BorderPane.alignment="CENTER" styleClass="graph">
-                <!-- A historical graph data chart for the converison from base currency to end currency -->
-                <LineChart fx:id="historicalGraph" animated="false" legendVisible="false" createSymbols="false">
-                    <xAxis>
-                        <CategoryAxis fx:id="dateAxis" label="Date"/>
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis fx:id="rateAxis" label="Rate"/>
-                    </yAxis>
-                </LineChart>
+            <ScrollPane BorderPane.alignment="CENTER" styleClass="descriptionScrollPane" fx:id="descriptionScrollPane">
+                <VBox styleClass="descBase">
+                    <Label text="From" textAlignment="LEFT"/>
+                    <Label fx:id="baseName" styleClass="baseName"/>
+                    <Label fx:id="baseDesc" styleClass="baseDesc"/>
+
+                </VBox>
+                <VBox styleClass="descTarget">
+                    <Label text="To" textAlignment="LEFT"/>
+                    <Label fx:id="targetName" styleClass="targetName"/>
+                    <Label fx:id="targetDesc" styleClass="targetDesc"/>
+                </VBox>
 
                 <!-- A message when no base and end currencies are selected -->
                 <Label fx:id="emptyGraphMsg" text="Select a base currency and an end currency" visible="false"/>
-
-                <!-- A spinner to show when the graph has been fully Loaded -->
-                <MFXProgressSpinner fx:id="loadingSpinner" visible="false"/>
-            </StackPane>
+            </ScrollPane>
         </center>
     </BorderPane>
 

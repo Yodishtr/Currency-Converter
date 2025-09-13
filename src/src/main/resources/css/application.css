@@ -1,0 +1,235 @@
+/**********************
+ * Global theme tokens
+ **********************/
+.root {
+    /* Palette */
+    -color-bg:        #0f1220;   /* app background */
+    -color-surface:   #171a2c;   /* cards/toolbars */
+    -color-surface-2: #1e2239;   /* deeper cards */
+    -color-stroke:    #2a2f4a;   /* borders/dividers */
+    -color-muted:     #9aa3b2;   /* secondary text */
+    -color-text:      #e7e9ee;   /* primary text */
+    -color-accent:    #5b8cff;   /* primary accent (indigo) */
+    -color-accent-2:  #3bd1c4;   /* secondary accent (teal) */
+    -color-danger:    #ff6b6b;
+
+    /* Typography */
+    -fx-font-family: "Inter", "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 13px;
+
+    -radius-sm: 8;
+    -radius-md: 12;
+    -radius-lg: 16;
+
+    -elev-1: dropshadow(gaussian, rgba(0,0,0,0.22), 18, 0.08, 0, 8);
+    -elev-0: dropshadow(gaussian, rgba(0,0,0,0.16), 10, 0.05, 0, 2);
+
+    -focus-ring: -color-accent;
+    -focus-ring-weak: rgba(91,140,255,0.35);
+
+    -fx-background-color: -color-bg;
+    -fx-text-fill: -color-text;
+}
+
+/**********************
+ * SplitPane & layout
+ **********************/
+.split-pane {
+    -fx-background-color: transparent;
+}
+
+.split-pane > .split-pane-divider {
+    -fx-background-color: -color-stroke;
+    -fx-padding: 0 1 0 1;           /* thin divider */
+    -fx-background-insets: 0;
+    -fx-opacity: 0.5;
+}
+
+/**********************
+ * Left: conversion log
+ **********************/
+.conversionLog {
+    -fx-background-color: -color-surface;
+    -fx-padding: 16;
+    -fx-spacing: 10;
+    -fx-background-radius: var(-radius-lg);
+    -fx-effect: var(-elev-1);
+}
+
+.conversionLog > .label {
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -color-text;
+}
+
+/* Try to cover both TableView and MFXTableView skins */
+.mfx-table-view, .table-view {
+    -fx-background-color: transparent;
+    -fx-background-radius: var(-radius-md);
+    -fx-border-color: -color-stroke;
+    -fx-border-radius: var(-radius-md);
+    -fx-border-width: 1;
+    -fx-effect: var(-elev-0);
+}
+
+.table-view .column-header-background,
+.mfx-table-view .column-header-background {
+    -fx-background-color: -color-surface-2;
+    -fx-background-radius: var(-radius-md) var(-radius-md) 0 0;
+    -fx-border-color: -color-stroke;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view .table-row-cell,
+.mfx-table-row {
+    -fx-background-color: transparent;
+    -fx-cell-size: 36px;
+}
+
+.table-row-cell:odd, .mfx-table-row:odd {
+    -fx-background-color: rgba(255,255,255,0.02);
+}
+
+.table-row-cell:selected, .mfx-table-row:selected {
+    -fx-background-color: rgba(91,140,255,0.18);
+}
+
+/**********************
+ * Right: conversions pane
+ **********************/
+.conversions {
+    -fx-background-color: transparent;
+    -fx-padding: 10 10 10 16;
+}
+
+/* Top conversion process bar */
+.conversionProcess {
+    -fx-background-color: -color-surface;
+    -fx-background-radius: var(-radius-lg);
+    -fx-padding: 14;
+    -fx-effect: var(-elev-1);
+    -fx-alignment: CENTER_LEFT;
+}
+
+/**********************
+ * MaterialFX inputs/buttons
+ * (safe, generic styling via -fx-* works fine)
+ **********************/
+.mfx-text-field, .mfx-filter-combo-box, .text-field, .combo-box {
+    -fx-background-color: -color-surface-2;
+    -fx-text-fill: -color-text;
+    -fx-prompt-text-fill: -color-muted;
+    -fx-background-radius: var(-radius-sm);
+    -fx-border-color: -color-stroke;
+    -fx-border-radius: var(-radius-sm);
+    -fx-border-width: 1;
+    -fx-padding: 8 12 8 12;
+}
+
+.mfx-text-field:focused, .mfx-filter-combo-box:focused,
+.text-field:focused, .combo-box:focused {
+    -fx-border-color: -focus-ring;
+    -fx-effect: dropshadow(gaussian, -focus-ring-weak, 10, 0.2, 0, 0);
+}
+
+/* Buttons (MFXButton & standard Button) */
+.mfx-button, .button {
+    -fx-background-color: linear-gradient(to bottom, -color-accent, derive(-color-accent, -8%));
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-background-radius: var(-radius-sm);
+    -fx-padding: 10 16 10 16;
+    -fx-effect: var(-elev-0);
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.mfx-button:hover, .button:hover {
+    -fx-background-color: linear-gradient(to bottom, derive(-color-accent, 6%), derive(-color-accent, -2%));
+}
+
+.mfx-button:pressed, .button:pressed {
+    -fx-background-color: derive(-color-accent, -12%);
+    -fx-effect: none;
+}
+
+/* Secondary / icon-y button (e.g., swap) — target via its fx:id if desired */
+#swapButton {
+    -fx-background-color: -color-surface-2;
+    -fx-text-fill: -color-text;
+    -fx-border-color: -color-stroke;
+}
+#swapButton:hover {
+    -fx-background-color: derive(-color-surface-2, 8%);
+}
+
+/**********************
+ * ScrollPane + description cards
+ **********************/
+.descriptionScrollPane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-fit-to-width: true;
+}
+
+/* Make both description VBoxes “cards” */
+.descBase, .descTarget {
+    -fx-background-color: -color-surface;
+    -fx-background-radius: var(-radius-lg);
+    -fx-padding: 16;
+    -fx-spacing: 6;
+    -fx-effect: var(-elev-1);
+    -fx-border-color: -color-stroke;
+    -fx-border-width: 1;
+}
+
+/* If they sit side-by-side, give breathing room */
+.descTarget { -fx-margin: 12 0 0 0; } /* ignored by JavaFX; spacing comes from parent, but kept for readability */
+
+/* Emphasis on codes & names */
+.baseCode, .targetCode {
+    -fx-font-size: 28px;
+    -fx-font-weight: 800;
+    -fx-text-fill: -color-accent-2;
+}
+.baseName, .targetName {
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -color-text;
+}
+.baseDesc, .targetDesc {
+    -fx-text-fill: -color-muted;
+    -fx-wrap-text: true;
+}
+
+/**********************
+ * Labels (generic)
+ **********************/
+.label {
+    -fx-text-fill: -color-text;
+}
+
+/**********************
+ * Scrollbars (sleek)
+ **********************/
+.scroll-bar:horizontal, .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+.thumb {
+    -fx-background-color: rgba(255,255,255,0.18);
+    -fx-background-radius: 8;
+}
+.track {
+    -fx-background-color: transparent;
+}
+
+/**********************
+ * Focus outlines (keyboard)
+ **********************/
+:focused {
+    -fx-faint-focus-color: transparent;
+    -fx-focus-color: -focus-ring;
+}
+
+

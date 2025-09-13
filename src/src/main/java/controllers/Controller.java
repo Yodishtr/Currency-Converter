@@ -20,6 +20,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.stage.Popup;
 import model.CurrencyCard;
 import model.CurrencyCatalog;
+import model.CurrencyInfo;
 import service.ServiceWiring;
 
 import java.io.IOException;
@@ -56,7 +57,7 @@ public class Controller {
 
     // Centre Right Panel: contains the line chart to display the historical data for the currency
     @FXML private ScrollPane descriptionScrollPane;
-    @FXML private Label baseName, baseDesc, targetName, targetDesc;
+    @FXML private Label baseName, baseCode, baseDesc, targetName, targetCode, targetDesc;
 
     // updates the ui conversion table by using an observable list so that no manual refresh needed.
     private final ObservableList<SelectLogs> conversions = FXCollections.observableArrayList();
@@ -79,14 +80,41 @@ public class Controller {
         loadLogsAsync();
 
         // listen to changes for the base and target currencies to display currency info in scrollpane
-        fromCombo.valueProperty().addListener((observable, oldValue, newValue) -> updateDetails());
-        toCombo.valueProperty().addListener((observable, oldValue, newValue) -> updateDetails());
+        fromCombo.valueProperty().addListener((observable, oldValue, newValue) -> updateDetailsFrom());
+        toCombo.valueProperty().addListener((observable, oldValue, newValue) -> updateDetailsTo());
 
 
     }
 
-    private void updateDetails() {
+    private void updateDetailsFrom() {
+        String fromComboValue = fromCombo.getValue().getCurrencyCode();
 
+        if (fromComboValue == null){
+            baseName.setText("");
+            baseCode.setText("");
+            baseDesc.setText("Choose both a source and a target currency.");
+        }
+
+        CurrencyInfo baseCurrencyInfo = serviceWiring.getCurrencyDesc().get(fromComboValue);
+
+        baseName.setText(baseCurrencyInfo.getCurrencyName());
+        baseCode.setText(baseCurrencyInfo.getCurrencyCode());
+        baseDesc.setText(baseCurrencyInfo.getCurrencyDescription());
+
+    }
+
+    private void updateDetailsTo() {
+        String toComboValue = toCombo.getValue().getCurrencyCode();
+        if (toComboValue == null) {
+            targetName.setText("");
+            targetCode.setText("");
+            targetDesc.setText("");
+        }
+
+        CurrencyInfo targetCurrencyInfo = serviceWiring.getCurrencyDesc().get(toComboValue);
+        targetName.setText(targetCurrencyInfo.getCurrencyName());
+        targetCode.setText(targetCurrencyInfo.getCurrencyCode());
+        targetDesc.setText(targetCurrencyInfo.getCurrencyDescription());
     }
 
     private void loadLogsAsync() {
@@ -106,7 +134,7 @@ public class Controller {
     }
 
     private void setupConversionTable() {
-        // setup the columns for the table.
+        // setup the columns for the table. Use lambda expression to retrieve appropriate value for row cell
         // add a comparator to enable filtering by the columns type
         // Base Currency column
         MFXTableColumn<SelectLogs> baseColumn = new MFXTableColumn<>("From", true);
@@ -145,7 +173,7 @@ public class Controller {
 
         if (sourceCurrency == null || targetCurrency == null || amount == null || sourceCurrency.isBlank() ||
                 targetCurrency.isBlank() || amount.isBlank()) {
-            ResultField.setText("Select currencies and input an amount");
+            ResultField.setText("");
             return;
         }
         BigDecimal collectedAmount;

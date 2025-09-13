@@ -33,20 +33,20 @@
         </top>
         <center>
             <ScrollPane BorderPane.alignment="CENTER" styleClass="descriptionScrollPane" fx:id="descriptionScrollPane">
-                <VBox styleClass="descBase">
+                <VBox spacing="5" styleClass="descBase">
                     <Label text="From" textAlignment="LEFT"/>
+                    <Label fx:id="baseCode" styleClass="baseCode"/>
                     <Label fx:id="baseName" styleClass="baseName"/>
                     <Label fx:id="baseDesc" styleClass="baseDesc"/>
 
                 </VBox>
-                <VBox styleClass="descTarget">
+                <VBox spacing="5" styleClass="descTarget">
                     <Label text="To" textAlignment="LEFT"/>
+                    <Label fx:id="targetCode" styleClass="targetCode"/>
                     <Label fx:id="targetName" styleClass="targetName"/>
                     <Label fx:id="targetDesc" styleClass="targetDesc"/>
                 </VBox>
 
-                <!-- A message when no base and end currencies are selected -->
-                <Label fx:id="emptyGraphMsg" text="Select a base currency and an end currency" visible="false"/>
             </ScrollPane>
         </center>
     </BorderPane>

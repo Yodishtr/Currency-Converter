@@ -21,9 +21,31 @@ public class TSVFileReader {
         try{
             InputStream input = getClass().getResourceAsStream("/currencies.tsv");
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            String line;
+            while ((line = reader.readLine()) != null){
+                if (line.isBlank()){
+                    continue;
+                }
+                String[] lineSplit = line.split("\t", 3);
+                String currencyCode =lineSplit[0];
+                String currencyName = lineSplit[1];
+                String currencyDescription = lineSplit[2];
+                CurrencyInfo currencyInfo = new CurrencyInfo(currencyCode, currencyName, currencyDescription);
+                currencyInfoMap.put(currencyCode, currencyInfo);
+            }
 
         } catch (Exception e){
             System.out.println("Could not load currency info. Error: " + e.getMessage());
         }
+    }
+
+    // Getter
+    public Map<String, CurrencyInfo> getCurrencyInfoMap(){
+        return currencyInfoMap;
+    }
+
+    // Setter
+    public void setCurrencyInfoMap(Map<String, CurrencyInfo> currencyInfoMap){
+        this.currencyInfoMap = currencyInfoMap;
     }
 }

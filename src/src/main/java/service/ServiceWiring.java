@@ -5,11 +5,13 @@ import dao.ConversionResult;
 import dao.InsertLogs;
 import dao.SelectLogs;
 import model.CurrencyCatalog;
+import model.CurrencyInfo;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * This class represents the wiring of all the available services. This would
@@ -21,6 +23,7 @@ public class ServiceWiring {
     private final Conversion conversionService = new Conversion();
     private final DBInsertion dbInsertionService = new DBInsertion();
     private final DBRetrieval dbRetrievalService = new DBRetrieval();
+    private final TSVFileReader tsvFileReader = new TSVFileReader();
 
     public ServiceWiring() {}
 
@@ -52,4 +55,9 @@ public class ServiceWiring {
     public void closeInsertionConnection() throws SQLException {
         dbInsertionService.getDBConnection().conn.close();
     }
+
+    public Map<String, CurrencyInfo> getCurrencyDesc(){
+        return tsvFileReader.getCurrencyInfoMap();
+    }
+
 }

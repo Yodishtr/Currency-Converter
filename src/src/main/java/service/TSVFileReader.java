@@ -27,6 +27,9 @@ public class TSVFileReader {
                     continue;
                 }
                 String[] lineSplit = line.split("\t", 3);
+                if (lineSplit.length != 3){
+                    continue;
+                }
                 String currencyCode =lineSplit[0];
                 String currencyName = lineSplit[1];
                 String currencyDescription = lineSplit[2];

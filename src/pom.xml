@@ -71,7 +71,7 @@
 
         <resources>
             <resource>
-                <directory>src/src/main/resources</directory>
+                <directory>src/main/resources</directory>
             </resource>
         </resources>
 
@@ -81,7 +81,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>app.app.JFXClass</mainClass>
+                    <mainClass>app.JFXClass</mainClass>
                 </configuration>
             </plugin>
         </plugins>

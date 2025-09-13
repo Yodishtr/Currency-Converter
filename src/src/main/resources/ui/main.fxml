@@ -7,14 +7,14 @@
 <?import javafx.scene.chart.NumberAxis?>
 
 
-
+<?import javafx.geometry.Insets?>
 <SplitPane dividerPositions="0.5"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="controllers.Controller">
     <!--Left Panel: contains recent conversion logs-->
     <VBox styleClass="conversionLog">
         <Label text="Currency Conversion History" textAlignment="CENTER"/>
-        <MFXTableView fx:id="conversionTable" prefHeight="500" prefWidth="600">
+        <MFXTableView fx:id="conversionTable" prefHeight="500" prefWidth="600" VBox.vgrow="ALWAYS">
 
         </MFXTableView>
     </VBox>
@@ -22,31 +22,39 @@
     <!-- Right Panel: top bar contains conversion and bottom rest contains the historical graph of the base currency -->
     <BorderPane styleClass="conversions">
         <top>
-            <HBox spacing="10" padding="16" styleClass="conversionProcess">
+            <HBox spacing="10" styleClass="conversionProcess">
                 <MFXFilterComboBox fx:id="fromCombo" promptText="From"/>
                 <MFXTextField fx:id="AmountField" floatingText="Amount" floatMode="BORDER"/>
                 <MFXFilterComboBox fx:id="toCombo" promptText="To"/>
-                <MFXTextField fx:id="ResultField" floatingText="Result" floatMode="Border"/>
+                <MFXTextField fx:id="ResultField" floatingText="Result" floatMode="BORDER"/>
                 <MFXButton fx:id="convertButton" text="Convert" buttonType="RAISED"/>
                 <MFXButton fx:id="swapButton" text="⇄" buttonType="RAISED"/>
+                <padding>
+                    <Insets topRightBottomLeft="16"/>
+                </padding>
             </HBox>
+
         </top>
         <center>
-            <ScrollPane BorderPane.alignment="CENTER" styleClass="descriptionScrollPane" fx:id="descriptionScrollPane">
-                <VBox spacing="5" styleClass="descBase">
-                    <Label text="From" textAlignment="LEFT"/>
-                    <Label fx:id="baseCode" styleClass="baseCode"/>
-                    <Label fx:id="baseName" styleClass="baseName"/>
-                    <Label fx:id="baseDesc" styleClass="baseDesc"/>
+            <ScrollPane BorderPane.alignment="CENTER" fitToWidth="true" fitToHeight="true"
+                        styleClass="descriptionScrollPane" fx:id="descriptionScrollPane">
+                <content>
+                    <HBox spacing="10" fillHeight="true">
+                        <VBox spacing="5" styleClass="descBase" prefWidth="380" maxHeight="Infinity" HBox.hgrow="ALWAYS">
+                            <Label text="From" textAlignment="LEFT"/>
+                            <Label fx:id="baseCode" styleClass="baseCode"/>
+                            <Label fx:id="baseName" styleClass="baseName"/>
+                            <Label fx:id="baseDesc" styleClass="baseDesc"/>
 
-                </VBox>
-                <VBox spacing="5" styleClass="descTarget">
-                    <Label text="To" textAlignment="LEFT"/>
-                    <Label fx:id="targetCode" styleClass="targetCode"/>
-                    <Label fx:id="targetName" styleClass="targetName"/>
-                    <Label fx:id="targetDesc" styleClass="targetDesc"/>
-                </VBox>
-
+                        </VBox>
+                        <VBox spacing="5" styleClass="descTarget" prefWidth="380" maxHeight="Infinity" HBox.hgrow="ALWAYS">
+                            <Label text="To" textAlignment="LEFT"/>
+                            <Label fx:id="targetCode" styleClass="targetCode"/>
+                            <Label fx:id="targetName" styleClass="targetName"/>
+                            <Label fx:id="targetDesc" styleClass="targetDesc" wrapText="true"/>
+                        </VBox>
+                    </HBox>
+                </content>
             </ScrollPane>
         </center>
     </BorderPane>

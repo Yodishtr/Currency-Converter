@@ -37,17 +37,23 @@ public class APIClient {
             connection.setRequestMethod("GET");
             int status = connection.getResponseCode();
             boolean stream;
-            if (status != 200){
-                stream = false;
-            } else {
+            if (status >= 400){
                 stream = true;
+            } else {
+                stream = false;
             }
             String responseBody = readResponse(connection, stream);
             rateResponse = mapper.readValue(responseBody, RateResponse.class);
 
+        } catch (java.net.MalformedURLException e) {
+            System.err.println("Bad URL: " + finalUrl);
+            return null;
+        } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
+            System.err.println("Failed to parse rates JSON: " + e.getMessage());
+            return null;
         } catch (IOException e) {
-            System.out.println("Malformed URL");
-
+            System.err.println("I/O error calling rates API: " + e.getMessage());
+            return null;
         }
         return rateResponse;
 

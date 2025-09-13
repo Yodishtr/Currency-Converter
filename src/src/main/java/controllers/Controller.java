@@ -204,6 +204,7 @@ public class Controller {
                     popup.getContent().add(message);
                     Bounds bounds = ResultField.localToScreen(ResultField.getBoundsInLocal());
                     popup.show(ResultField, bounds.getMinX(), bounds.getMaxY());
+                    popup.hide();
                 });
                 loadLogsAsync();
 
@@ -214,6 +215,7 @@ public class Controller {
                     popup.getContent().add(message);
                     Bounds bounds = ResultField.localToScreen(ResultField.getBoundsInLocal());
                     popup.show(ResultField, bounds.getMinX(), bounds.getMaxY());
+                    popup.hide();
                 });
 
             } finally {

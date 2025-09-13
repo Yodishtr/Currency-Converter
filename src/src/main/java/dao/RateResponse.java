@@ -10,6 +10,7 @@ import java.util.Map;
  */
 public class RateResponse {
     private boolean success;
+    private long timestamp;
     private String base;
     private String date;
     private Map<String, BigDecimal> rates;
@@ -32,6 +33,10 @@ public class RateResponse {
         this.rates = rates;
     }
 
+    public void setTimestamp(long timestamp){
+        this.timestamp = timestamp;
+    }
+
     // Getters
     public boolean getSuccess(){
         return success;
@@ -43,6 +48,10 @@ public class RateResponse {
 
     public String getDate(){
         return date;
+    }
+
+    public long getTimestamp(){
+        return timestamp;
     }
 
     public Map<String, BigDecimal> getRates(){

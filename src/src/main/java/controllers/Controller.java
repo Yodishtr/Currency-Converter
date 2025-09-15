@@ -17,6 +17,9 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Popup;
 import model.CurrencyCard;
 import model.CurrencyCatalog;
@@ -43,7 +46,12 @@ public class Controller {
     });
 
     // Left Panel: contains table of conversion logs
-    @FXML private MFXTableView<SelectLogs> conversionTable;
+    @FXML private TableView<SelectLogs> conversionTable;
+    @FXML private TableColumn<SelectLogs, String> baseCurrencyColumn;
+    @FXML private TableColumn<SelectLogs, String> finalCurrencyColumn;
+    @FXML private TableColumn<SelectLogs, BigDecimal> amountColumn;
+    @FXML private TableColumn<SelectLogs, BigDecimal> resultColumn;
+    @FXML private TableColumn<SelectLogs, LocalDateTime> timeColumn;
 
 
     // Top Right panel: contains the textfields and buttons for conversions
@@ -75,9 +83,10 @@ public class Controller {
         swapButton.setOnAction(e -> onSwap());
 
         // handling the table display
+        loadLogsAsync();
         setupConversionTable();
         conversionTable.setItems(conversions);
-        loadLogsAsync();
+
 
         // listen to changes for the base and target currencies to display currency info in scrollpane
         fromCombo.valueProperty().addListener((observable, oldValue, newValue) -> updateDetailsFrom());
@@ -120,13 +129,20 @@ public class Controller {
     private void loadLogsAsync() {
         ioExecutor.submit(() -> {
             try{
+                System.out.println("about to do retrieval");
                 ArrayList<SelectLogs> conversionLogs = serviceWiring.performRetrieval();
+                System.out.println("Retrieval complete");
                 Platform.runLater(() -> {
                     conversions.setAll(conversionLogs);
+                    for (SelectLogs item : conversions){
+                        System.out.println(item);
+                    }
+                    System.out.println("conversions has been set to updated logs");
                 });
 
             } catch(Exception e){
                 Platform.runLater(() -> {
+                    System.out.println("unable to retrieve data for table");
                     conversions.clear();
                 });
             }
@@ -137,33 +153,40 @@ public class Controller {
         // setup the columns for the table. Use lambda expression to retrieve appropriate value for row cell
         // add a comparator to enable filtering by the columns type
         // Base Currency column
-        MFXTableColumn<SelectLogs> baseColumn = new MFXTableColumn<>("From", true);
-        baseColumn.setRowCellFactory(log -> new MFXTableRowCell<>(SelectLogs::getBaseCurrency));
-        baseColumn.setComparator(Comparator.comparing(SelectLogs::getBaseCurrency, Comparator.nullsLast(String::compareTo)));
+        baseCurrencyColumn.setCellValueFactory(new PropertyValueFactory<>("baseCurrency"));
+        //MFXTableColumn<SelectLogs> baseColumn = new MFXTableColumn<>("From", true);
+        //baseColumn.setRowCellFactory(log -> new MFXTableRowCell<>(SelectLogs::getBaseCurrency));
+        //baseColumn.setComparator(Comparator.comparing(SelectLogs::getBaseCurrency, Comparator.nullsLast(String::compareTo)));
 
         // Final currency column
-        MFXTableColumn<SelectLogs> finalColumn = new MFXTableColumn<>("To", true);
-        finalColumn.setRowCellFactory(log -> new MFXTableRowCell<>(SelectLogs::getFinalCurrency));
-        finalColumn.setComparator(Comparator.comparing(SelectLogs::getFinalCurrency, Comparator.nullsLast(String::compareTo)));
+        finalCurrencyColumn.setCellValueFactory(new PropertyValueFactory<>("finalCurrency"));
+        //MFXTableColumn<SelectLogs> finalColumn = new MFXTableColumn<>("To", true);
+        //finalColumn.setRowCellFactory(log -> new MFXTableRowCell<>(SelectLogs::getFinalCurrency));
+        //finalColumn.setComparator(Comparator.comparing(SelectLogs::getFinalCurrency, Comparator.nullsLast(String::compareTo)));
 
         // Amount Column
-        MFXTableColumn<SelectLogs> amountColumn = new MFXTableColumn<>("Amount", true);
-        amountColumn.setRowCellFactory(log -> new MFXTableRowCell<>(l -> l.getAmount().toPlainString()));
-        amountColumn.setComparator(Comparator.comparing(SelectLogs::getAmount, Comparator.nullsLast(BigDecimal::compareTo)));
+        amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        //MFXTableColumn<SelectLogs> amountColumn = new MFXTableColumn<>("Amount", true);
+        //amountColumn.setRowCellFactory(log -> new MFXTableRowCell<>(l -> l.getAmount().toPlainString()));
+        //amountColumn.setComparator(Comparator.comparing(SelectLogs::getAmount, Comparator.nullsLast(BigDecimal::compareTo)));
 
         // Result Column
-        MFXTableColumn<SelectLogs> resultColumn = new MFXTableColumn<>("Result", true);
-        resultColumn.setRowCellFactory(log -> new MFXTableRowCell<>(l -> l.getResult().toPlainString()));
-        resultColumn.setComparator(Comparator.comparing(SelectLogs::getResult, Comparator.nullsLast(BigDecimal::compareTo)));
+        resultColumn.setCellValueFactory(new PropertyValueFactory<>("result"));
+        //MFXTableColumn<SelectLogs> resultColumn = new MFXTableColumn<>("Result", true);
+        //resultColumn.setRowCellFactory(log -> new MFXTableRowCell<>(l -> l.getResult().toPlainString()));
+        //resultColumn.setComparator(Comparator.comparing(SelectLogs::getResult, Comparator.nullsLast(BigDecimal::compareTo)));
 
         // Timestamp Column
-        MFXTableColumn<SelectLogs> timeColumn = new MFXTableColumn<>("Time", true);
-        timeColumn.setRowCellFactory(log -> new MFXTableRowCell<>(l -> l.getTimeStamp().toString()));
-        timeColumn.setComparator(Comparator.comparing(SelectLogs::getTimeStamp, Comparator.nullsLast(LocalDateTime::compareTo)));
+        timeColumn.setCellValueFactory(new PropertyValueFactory<>("timeStamp"));
+        //MFXTableColumn<SelectLogs> timeColumn = new MFXTableColumn<>("Time", true);
+        //timeColumn.setRowCellFactory(log -> new MFXTableRowCell<>(l -> l.getTimeStamp().toString()));
+        //timeColumn.setComparator(Comparator.comparing(SelectLogs::getTimeStamp, Comparator.nullsLast(LocalDateTime::compareTo)));
 
         // add the columns to the conversion log table
-        conversionTable.getTableColumns().addAll(baseColumn, finalColumn, amountColumn, resultColumn, timeColumn);
-        conversionTable.autosizeColumnsOnInitialization();
+        conversionTable.setItems(conversions);
+        conversionTable.autosize();
+        //conversionTable.getTableColumns().addAll(baseColumn, finalColumn, amountColumn, resultColumn, timeColumn);
+        //conversionTable.autosizeColumnsOnInitialization();
     }
 
     private void onConvert(){
@@ -207,6 +230,7 @@ public class Controller {
                     popup.hide();
                 });
                 loadLogsAsync();
+                System.out.println("performed retrieval"); // checking to see if retrieval service is called
 
             } catch(Exception e) {
                 Platform.runLater(() -> {

@@ -23,6 +23,31 @@
 /**********************
  * SplitPane + layout
  **********************/
+
+.split-pane, .border-pane, .scroll-pane, .tab-pane, .vbox, .hbox, .table-view {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.scroll-pane,
+.scroll-pane > .viewport,
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.table-view,
+.table-view .virtual-flow,
+.table-view .viewport,
+.table-view .corner {
+    -fx-background-color: #0f1220;
+    -fx-background-insets: 0;
+}
+
+.descBase, .descTarget, .conversionLog, .conversionProcess {
+    -fx-background-insets: 0;
+}
+
 .split-pane {
     -fx-background-color: transparent;
 }
@@ -37,7 +62,6 @@
  **********************/
 .conversionLog {
     -fx-background-color: -color-surface;
-    -fx-padding: 16;
     -fx-spacing: 10;
     -fx-background-radius: 16px;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.22), 18, 0.08, 0, 8);
@@ -50,26 +74,25 @@
 }
 
 /* Table (MFX & standard) */
-.mfx-table-view, .table-view {
-    -fx-background-color: transparent;
+.table-view {
+    -fx-background-color: -color-bg;
     -fx-background-radius: 12px;
     -fx-border-color: -color-stroke;
     -fx-border-radius: 12px;
     -fx-border-width: 1;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.16), 10, 0.05, 0, 2);
+    -fx-text-fill: white;
 }
 
-.table-view .column-header-background,
-.mfx-table-view .column-header-background {
+.table-view .column-header-background {
     -fx-background-color: -color-surface-2;
     -fx-background-radius: 12px 12px 0 0;
     -fx-border-color: -color-stroke;
     -fx-border-width: 0 0 1 0;
 }
 
-.table-view .table-row-cell,
-.mfx-table-row {
-    -fx-background-color: transparent;
+.table-view .table-row-cell {
+    -fx-background-color: -color-text;
     -fx-cell-size: 36px;
 }
 .table-row-cell:odd, .mfx-table-row:odd {
@@ -82,7 +105,10 @@
 /**********************
  * Right: conversions pane
  **********************/
-.conversions { -fx-background-color: transparent; -fx-padding: 10 10 10 16; }
+.conversions {
+    -fx-background-color: transparent;
+    -fx-padding: 10 10 10 16;
+}
 
 /* Top bar */
 .conversionProcess {
@@ -113,6 +139,27 @@
     -fx-effect: dropshadow(gaussian, rgba(91,140,255,0.35), 10, 0.2, 0, 0);
 }
 
+.mfx-list-view {
+    -fx-background-color: -color-surface-2;
+    -fx-background-insets: 0;
+    -fx-control-inner-background: -color-surface-2;
+    -fx-text-fill: -color-text;
+}
+.mfx-list-cell {
+    -fx-background-color: transparent;
+}
+.mfx-list-cell:hover, .mfx-list-cell:selected {
+    -fx-background-color: rgba(91,140,255,0.18);
+}
+.mfx-list-cell .label {
+    -fx-text-fill: -color-text;
+}
+
+.mfx-text-field, .mfx-filter-combo-box {
+    -mfx-text-fill: -color-text;           /* text inside */
+    -mfx-prompt-text-fill: -color-muted;   /* floating/prompt */
+    -mfx-line-stroke: -color-accent;       /* focus line color (optional) */
+}
 /**********************
  * Buttons (MFX + standard)
  **********************/
@@ -125,6 +172,12 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.16), 10, 0.05, 0, 2);
     -fx-cursor: hand;
     -fx-border-color: transparent;
+    -fx-min-width: 96;
+    -fx-text-overrun: clip;
+}
+
+.mfx-button .convertButton {
+
 }
 .mfx-button:hover, .button:hover {
     -fx-background-color: linear-gradient(to bottom, derive(-color-accent, 6%), derive(-color-accent, -2%));

@@ -15,7 +15,7 @@ public class JFXClass extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/ui/main.fxml"));
-        var scene = new Scene(root, 1200, 700);
+        var scene = new Scene(root, 1500, 700);
         scene.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.show();

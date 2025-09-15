@@ -68,4 +68,9 @@ public class SelectLogs {
     public LocalDateTime getTimeStamp() {
         return timeStamp;
     }
+
+    @Override
+    public String toString() {
+        return "amount :" + amount + " result: " + result;
+    }
 }

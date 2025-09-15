@@ -39,10 +39,13 @@ public class DBRetrieval {
        }
        int numberOfLogs = selectLogsList.getLogsList().size();
        if (numberOfLogs == 0) {
+           System.out.println("number of logs is 0");
            return new ArrayList<>();
        } else if (numberOfLogs < 5) {
+           System.out.println("number of logs is less than 5 : " + selectLogsList.getLogsList().toString());
            return selectLogsList.getLogsList();
        } else {
+           System.out.println("number of logs is greater than 5 : " + selectLogsList.getLogsList().toString());
            return new ArrayList<>(selectLogsList.getLogsList().subList(0, 6));
        }
 

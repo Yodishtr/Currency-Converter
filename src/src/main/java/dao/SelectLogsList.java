@@ -18,4 +18,14 @@ public class SelectLogsList {
         this.logsList = logsList;
     }
 
+    @Override
+    public String toString(){
+
+        if (logsList.isEmpty()){
+            return "";
+        } else {
+            return logsList.getFirst().toString();
+        }
+    }
+
 }

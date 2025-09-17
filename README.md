@@ -34,3 +34,12 @@ The Currency Converter is a simple yet practical desktop application built with 
   3. Click Convert to view the result.
   
   4. Recent conversions are saved automatically and displayed in the history pane.
+     
+  5. Swap button automatically switches the currencies with each other.
+
+     <img width="1432" height="726" alt="currency app " src="https://github.com/user-attachments/assets/01ce1443-b7c5-421b-97d7-57e208f68425" />
+
+
+
+
+     

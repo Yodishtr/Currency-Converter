@@ -46,7 +46,7 @@ public class DBRetrieval {
            return selectLogsList.getLogsList();
        } else {
            System.out.println("number of logs is greater than 5 : " + selectLogsList.getLogsList().toString());
-           return new ArrayList<>(selectLogsList.getLogsList().subList(0, 6));
+           return new ArrayList<>(selectLogsList.getLogsList());
        }
 
    }

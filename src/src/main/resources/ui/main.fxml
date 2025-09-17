@@ -2,9 +2,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import io.github.palexdev.materialfx.controls.*?>
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.NumberAxis?>
+
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.Controller">
